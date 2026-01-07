@@ -5,15 +5,12 @@
 <title>MoneyZen CS</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0f172a">
-
 <link rel="manifest" href="manifest.json">
 <link rel="stylesheet" href="style.css">
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 </head>
-
 <body>
 <header>
   <h1>MoneyZen CS</h1>
@@ -58,7 +55,7 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js');
 }
 
-// Prompt para instalar PWA
+// Prompt de instalação PWA
 let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
@@ -68,10 +65,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
   btn.classList.add('install-btn');
   btn.onclick = () => {
     deferredPrompt.prompt();
-    deferredPrompt.userChoice.then((choiceResult) => {
-      deferredPrompt = null;
-      btn.remove();
-    });
+    deferredPrompt.userChoice.then(() => { deferredPrompt = null; btn.remove(); });
   };
   document.body.appendChild(btn);
 });
