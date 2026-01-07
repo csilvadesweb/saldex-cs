@@ -25,7 +25,10 @@ function render(){
   if(chart) chart.destroy();
   chart=new Chart(grafico,{
     type:'pie',
-    data:{labels:['Renda','Despesas'],datasets:[{data:[r,d],backgroundColor:['#22c55e','#ef4444']}]},
+    data:{
+      labels:['Renda','Despesas'],
+      datasets:[{data:[r,d],backgroundColor:['#22c55e','#ef4444']}]
+    },
     options:{responsive:true,maintainAspectRatio:false}
   });
 }
