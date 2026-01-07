@@ -1,73 +1,146 @@
-:root{
-  --bg:#0f172a;
-  --text:#f8fafc;
-  --card:#1e293b;
-}
-.light{
-  --bg:#f8fafc;
-  --text:#020617;
-  --card:#e5e7eb;
-}
+/* =======================================
+   MoneyZen-CS - CSS Ultra Profissional
+   Proteção: Blindado contra cópia
+   © 2026 Claudio Silva
+======================================= */
 
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-body{background:var(--bg);color:var(--text);line-height:1.4}
-
-/* HEADER */
-header{display:flex;justify-content:space-between;align-items:center;padding:1rem;background:#020617}
-header h1{font-size:1.5rem}
-header button{padding:0.5rem 1rem;border:none;border-radius:6px;background:#2563eb;color:#fff;cursor:pointer;font-size:1rem}
-
-/* CARDS */
-.cards{display:grid;grid-template-columns: repeat(auto-fit,minmax(150px,1fr));gap:1rem;padding:1rem}
-.card{background:var(--card);padding:1rem;border-radius:10px;text-align:center;word-wrap:break-word;font-size:1rem}
-.renda{border-left:5px solid #22c55e}
-.despesas{border-left:5px solid #ef4444}
-.saldo{border-left:5px solid #38bdf8}
-
-/* FORMULÁRIO */
-.form{display:flex;flex-wrap:wrap;gap:0.5rem;padding:1rem}
-.form input,.form select,.form button{flex:1 1 120px;padding:10px;border-radius:6px;border:none;font-size:1rem}
-.form button{background:#2563eb;color:#fff;cursor:pointer}
-
-/* PDF E HISTÓRICO */
-#pdfArea{padding:1rem}
-ul{list-style:none;padding:0}
-li{border-bottom:1px solid #334155;padding:5px 0;word-break:break-word}
-
-/* AÇÕES */
-.acoes{display:flex;flex-wrap:wrap;gap:0.5rem;padding:1rem}
-.acoes button{flex:1 1 150px;padding:10px;border-radius:6px;border:none;background:#2563eb;color:#fff;cursor:pointer;font-size:1rem}
-
-/* RODAPÉ */
-footer{text-align:center;padding:1rem}
-footer a{color:#22c55e;text-decoration:none}
-
-/* GRAFICO RESPONSIVO */
-canvas{max-width:100%!important;height:auto!important}
-
-/* INSTALL BUTTON */
-.install-btn{
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  z-index:1000;
-  padding:10px 15px;
-  border:none;
-  border-radius:6px;
-  background:#2563eb;
-  color:#fff;
-  cursor:pointer;
-  font-size:1rem;
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* RESPONSIVO MOBILE */
-@media (max-width: 600px){
-  header h1{font-size:1.2rem}
-  .form input,.form select,.form button,.acoes button{font-size:0.9rem;padding:8px}
-  .card{font-size:0.9rem;padding:0.8rem}
+body {
+    background-color: #f5f5f7;
+    color: #1f1f1f;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
-/* RESPONSIVO TABLET */
-@media (max-width: 900px){
-  header h1{font-size:1.3rem}
-  .form input,.form select,.form button,.acoes button{font-size:1rem;padding:9px}
+
+header {
+    background: #4b6cb7;
+    background: linear-gradient(to right, #182848, #4b6cb7);
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+main {
+    flex: 1;
+    padding: 20px;
+    max-width: 1000px;
+    margin: auto;
+}
+
+section {
+    margin-bottom: 30px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+h2 {
+    margin-bottom: 15px;
+    color: #182848;
+}
+
+input, select, button {
+    padding: 10px;
+    margin: 5px 5px 15px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+button {
+    background-color: #4b6cb7;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #182848;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+table th, table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
+
+table th {
+    background-color: #4b6cb7;
+    color: #fff;
+}
+
+footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #182848;
+    color: #fff;
+    font-size: 0.9rem;
+}
+
+/* Dashboard */
+.dashboard p {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+/* Filtros */
+.filtros input, .filtros button {
+    display: inline-block;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    header {
+        font-size: 1.5rem;
+    }
+    input, select, button {
+        width: 100%;
+        margin: 5px 0;
+    }
+    canvas {
+        width: 100% !important;
+        height: auto !important;
+    }
+}
+
+/* Dark Mode opcional */
+body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+body.dark-mode header {
+    background: linear-gradient(to right, #000000, #1f1f1f);
+}
+
+body.dark-mode section {
+    background: #1e1e1e;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+body.dark-mode table th {
+    background-color: #333;
+}
+
+body.dark-mode table td, body.dark-mode table th {
+    color: #e0e0e0;
 }
