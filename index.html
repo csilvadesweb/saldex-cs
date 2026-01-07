@@ -2,93 +2,65 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MoneyZen-CS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f172a">
 
 <link rel="stylesheet" href="style.css">
-<link rel="manifest" href="manifest.json">
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 
 <body>
-
 <header>
-  <h1>MoneyZen CS</h1>
-
-  <div class="menu-topo">
-    <button id="toggleTema">🌙 Tema</button>
-    <button id="salvarHistorico">💾 Backup</button>
-    <button id="limparHistorico">🗑 Limpar</button>
-  </div>
+  <h1>MoneyZen-CS</h1>
+  <button id="toggleTheme">🌙</button>
 </header>
 
 <main>
-
-<section>
-  <h2>Novo Registro</h2>
-  <input id="descricao" placeholder="Descrição">
-  <input id="valor" type="number" placeholder="Valor">
-  <select id="tipo">
-    <option value="renda">Renda</option>
-    <option value="despesa">Despesa</option>
+<section class="form">
+  <input type="date" id="date">
+  <input type="text" id="desc" placeholder="Descrição">
+  <input type="number" id="value" placeholder="Valor">
+  <select id="type">
+    <option value="income">Renda</option>
+    <option value="expense">Despesa</option>
   </select>
-  <select id="categoria">
-    <option value="Geral">Geral</option>
+  <select id="category">
+    <option>Alimentação</option>
+    <option>Moradia</option>
+    <option>Transporte</option>
+    <option>Lazer</option>
+    <option>Outros</option>
   </select>
-  <input id="data" type="date">
-  <button id="adicionar">Adicionar</button>
+  <button onclick="addTransaction()">Salvar</button>
 </section>
 
-<section>
-  <h2>Filtros</h2>
-  <input type="date" id="filtroInicio">
-  <input type="date" id="filtroFim">
-  <button id="aplicarFiltro">Aplicar</button>
-  <button id="limparFiltro">Limpar</button>
+<section id="summary"></section>
+
+<canvas id="chart"></canvas>
+
+<section class="actions">
+  <button onclick="exportCSV()">Exportar CSV</button>
+  <button onclick="exportPDF()">Exportar PDF</button>
+  <button onclick="clearAll()">Limpar Histórico</button>
 </section>
 
-<section class="dashboard">
-  <h2>Resumo</h2>
-  <p>Renda: R$ <span id="totalRenda">0</span></p>
-  <p>Despesa: R$ <span id="totalDespesa">0</span></p>
-  <p>Saldo: R$ <span id="saldo">0</span></p>
-  <canvas id="graficoFluxo"></canvas>
-</section>
-
-<section>
-  <h2>Histórico</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Data</th>
-        <th>Descrição</th>
-        <th>Categoria</th>
-        <th>Tipo</th>
-        <th>Valor</th>
-      </tr>
-    </thead>
-    <tbody id="tabelaHistorico"></tbody>
-  </table>
-
-  <button id="exportarCSV">Exportar CSV</button>
-  <button id="exportarPDF">Exportar PDF</button>
-  <input type="file" id="importarCSV" accept=".csv">
-</section>
-
+<section id="history"></section>
 </main>
 
 <footer>
-  © 2026 MoneyZen-CS – Claudio Silva – Código protegido
+  <p>MoneyZen-CS • Desenvolvido por CS</p>
 </footer>
 
 <script src="script.js"></script>
 
 <script>
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("service-worker.js");
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./service-worker.js');
 }
 </script>
 
