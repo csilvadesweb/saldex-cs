@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>MoneyZen CS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0f172a">
+
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</head>
+
+<body>
+<header>
+  <h1>MoneyZen CS</h1>
+  <button onclick="toggleTheme()">🌗</button>
+</header>
+
+<main>
+
+<section class="cards">
+  <div class="card renda">Renda<br><strong id="renda">R$ 0,00</strong></div>
+  <div class="card despesas">Despesas<br><strong id="despesas">R$ 0,00</strong></div>
+  <div class="card saldo">Saldo<br><strong id="saldo">R$ 0,00</strong></div>
+</section>
+
+<section class="form">
+  <input id="desc" placeholder="Descrição">
+  <input id="valor" type="number" placeholder="Valor">
+  <select id="tipo">
+    <option value="renda">Renda</option>
+    <option value="despesa">Despesa</option>
+  </select>
+  <button onclick="add()">Salvar</button>
+</section>
+
+<section id="pdfArea">
+  <h2>Resumo Financeiro</h2>
+  <canvas id="grafico"></canvas>
+  <h3>Histórico</h3>
+  <ul id="historico"></ul>
+</section>
+
+<section class="acoes">
+  <button onclick="gerarPDF()">📄 Exportar PDF Profissional</button>
+</section>
+
+<footer>
+  <a href="privacy.html">Política de Privacidade</a>
+</footer>
+
+<script src="script.js"></script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+
+// Prompt para instalar PWA
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const btn = document.createElement('button');
+  btn.textContent = '📥 Instalar App';
+  btn.classList.add('install-btn');
+  btn.onclick = () => {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      deferredPrompt = null;
+      btn.remove();
+    });
+  };
+  document.body.appendChild(btn);
+});
+</script>
+</body>
+</html>
