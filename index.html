@@ -26,22 +26,23 @@
     <div class="input-group">
       <input type="text" id="nomeDesc" placeholder="Descrição (Ex: Salário, Aluguel)">
       <input type="number" id="valorMontante" placeholder="Valor R$">
-      <div class="buttons-row">
-        <button onclick="adicionar('renda')" class="btn-renda">＋ Renda</button>
-        <button onclick="adicionar('despesa')" class="btn-despesa">－ Despesa</button>
+      <div class="buttons-row" style="display: flex; gap: 10px; margin-top: 10px;">
+        <button onclick="adicionar('renda')" style="flex: 1; background-color: #1b465a; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">＋ Renda</button>
+        <button onclick="adicionar('despesa')" style="flex: 1; background-color: #d14d4d; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">－ Despesa</button>
       </div>
     </div>
   </section>
 
   <section class="card">
     <h2>Resumo Financeiro</h2>
-    <div class="resumo-container">
-      <p>Renda Total: <span id="resumoRenda" class="renda">R$ 0,00</span></p>
-      <p>Despesas Totais: <span id="resumoDespesa" class="despesa">R$ 0,00</span></p>
+    <div class="resumo-container" style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+      <p>Renda Total: <span id="resumoRenda" style="color: #1b465a; font-weight: bold;">R$ 0,00</span></p>
+      <p>Despesas Totais: <span id="resumoDespesa" style="color: #d14d4d; font-weight: bold;">R$ 0,00</span></p>
+      <hr>
       <p><strong>Saldo Final: <span id="resumoSaldo">R$ 0,00</span></strong></p>
     </div>
     
-    <div class="chart-box">
+    <div class="chart-box" style="max-width: 300px; margin: 0 auto;">
       <canvas id="graficoFinanceiro"></canvas>
     </div>
   </section>
@@ -51,14 +52,14 @@
     <div id="listaHistorico">
       </div>
     
-    <hr>
+    <hr style="margin: 20px 0;">
     
-    <button onclick="exportarPDF()" class="btn-pdf">
+    <button onclick="exportarPDF()" style="width: 100%; background-color: #333; color: white; padding: 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
       📄 Exportar PDF Profissional
     </button>
     
-    <div style="margin-top: 20px; text-align: center;">
-        <a href="privacy.html" style="color: #666; font-size: 0.8em;">Política de Privacidade</a>
+    <div style="margin-top: 25px; text-align: center;">
+        <a href="privacy.html" style="color: #888; font-size: 0.8em; text-decoration: none;">Política de Privacidade</a>
     </div>
   </section>
 </main>
@@ -66,12 +67,12 @@
 <script src="script.js"></script>
 
 <script>
-  // Registro do Service Worker para PWA
+  // Registro do Service Worker (PWA)
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
       navigator.serviceWorker.register("./service-worker.js")
-        .then(() => console.log("Service Worker registrado"))
-        .catch(err => console.error("Erro no Service Worker", err));
+        .then(() => console.log("Service Worker ativo"))
+        .catch(err => console.error("Falha no Service Worker", err));
     });
   }
 </script>
