@@ -5,12 +5,10 @@
   <title>MoneyZen CS</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" content="#0b2c3d">
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="Icon-192.png">
-  <link rel="icon" href="Icon-192.png">
   <meta name="author" content="C. Silva">
-  <meta name="copyright" content="MoneyZen CS 2026 - Propriedade de C. Silva">
+  <meta name="copyright" content="MoneyZen CS 2026 - Todos os direitos reservados">
   <link rel="stylesheet" href="style.css">
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
@@ -27,7 +25,7 @@
   <section class="card">
     <h2>Nova Movimentação</h2>
     <div class="input-group">
-      <input type="text" id="nomeDesc" placeholder="Descrição">
+      <input type="text" id="nomeDesc" placeholder="Descrição (Ex: Salário)">
       <input type="number" id="valorMontante" placeholder="Valor R$">
       <div class="buttons-row">
         <button onclick="adicionar('renda')" class="btn-renda">＋ Renda</button>
@@ -37,26 +35,32 @@
   </section>
 
   <section class="card">
+    <h2>Resumo Financeiro</h2>
     <div id="resumoBox">
-      <p>Saldo: <span id="resumoSaldo" style="font-weight:bold">R$ 0,00</span></p>
-      <p style="font-size:0.8em; opacity:0.8">Renda: <span id="resumoRenda">R$ 0,00</span> | Despesa: <span id="resumoDespesa">R$ 0,00</span></p>
+      <p>Renda Total: <span id="resumoRenda">R$ 0,00</span></p>
+      <p>Despesas Totais: <span id="resumoDespesa">R$ 0,00</span></p>
+      <hr>
+      <p><strong>Saldo Final: <span id="resumoSaldo">R$ 0,00</span></strong></p>
     </div>
-    <div class="chart-box"><canvas id="graficoFinanceiro"></canvas></div>
+    <div class="chart-box">
+      <canvas id="graficoFinanceiro"></canvas>
+    </div>
   </section>
 
   <section class="card">
+    <h2>Histórico Detalhado</h2>
     <div id="listaHistorico"></div>
     <hr>
-    <button onclick="exportarPDF()" class="btn-pdf">📄 Exportar PDF (Histórico Completo)</button>
+    <button onclick="exportarPDF()" class="btn-pdf">📄 Exportar PDF Profissional</button>
     <button onclick="zerarDados()" class="btn-zerar">⚠️ Zerar todos os dados</button>
   </section>
 </main>
 
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
-  }
-</script>
+<footer>
+  <p>© 2026 MoneyZen CS - Propriedade de C. Silva</p>
+  <a href="privacy.html">Privacidade</a>
+</footer>
+
 <script src="script.js"></script>
 </body>
 </html>
