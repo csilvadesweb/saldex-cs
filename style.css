@@ -1,0 +1,10 @@
+body { margin:0; font-family: Arial, sans-serif; background:#f4f6f8; color:#333; }
+header { background:#0b2c3d; color:#fff; padding:15px; display:flex; justify-content:space-between; align-items:center; }
+header h1 { margin:0; font-size:1.5em; }
+button { padding:8px 12px; border:none; border-radius:6px; background:#1abc9c; color:#fff; cursor:pointer; }
+main { padding:20px; }
+section { margin-bottom:20px; }
+.resumo, .historico, .grafico, .assinatura { background:#fff; padding:20px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+ul { padding-left:20px; }
+ul li { margin-bottom:5px; }
+canvas { max-width:100%; height:auto; }
