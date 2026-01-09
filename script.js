@@ -14,7 +14,7 @@ function adicionar(tipo) {
     const valor = parseFloat(valorInput.value);
 
     if (nome === "" || isNaN(valor) || valor <= 0) {
-        alert("Insira um nome e um valor válido.");
+        alert("Preencha corretamente o nome e o valor.");
         return;
     }
 
@@ -43,13 +43,12 @@ function atualizarInterface() {
 
     let totalRenda = 0;
     let totalDespesa = 0;
-
-    let htmlRendas = "<h3>Histórico de Rendas</h3>";
-    let htmlDespesas = "<h3>Histórico de Despesas</h3>";
+    let htmlRendas = "<h4>Histórico de Rendas</h4>";
+    let htmlDespesas = "<h4>Histórico de Despesas</h4>";
 
     transacoes.forEach(t => {
-        const itemHtml = `<div class="historico-item" style="display:flex; justify-content:space-between; margin-bottom:5px;">
-            <span>${t.data} - ${t.nome}:</span> 
+        const itemHtml = `<div style="display:flex; justify-content:space-between; font-size: 0.9em; margin-bottom:4px;">
+            <span>${t.data} - ${t.nome}</span> 
             <b style="color: ${t.tipo === 'renda' ? '#1b465a' : '#d14d4d'}">R$ ${t.valor.toFixed(2)}</b>
         </div>`;
 
@@ -91,63 +90,45 @@ function atualizarGrafico(renda, despesa) {
     });
 }
 
-// --- FUNÇÃO EXPORTAR PDF (IGUAL À IMAGEM) ---
 async function exportarPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
-    const dataAtual = new Date().toLocaleDateString('pt-BR');
+    const agora = new Date();
+    const dataHora = `${agora.toLocaleDateString('pt-BR')} às ${agora.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}`;
 
-    // Cabeçalho
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold").setFontSize(18);
     doc.text("MoneyZen CS", 105, 20, { align: "center" });
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "normal");
+    doc.setFont("helvetica", "normal").setFontSize(10);
     doc.text("Relatório Financeiro Completo", 105, 27, { align: "center" });
+    doc.setFontSize(8).setTextColor(100);
+    doc.text(`Gerado em: ${dataHora}`, 105, 32, { align: "center" });
+    doc.setTextColor(0);
 
-    // Resumo
-    const rendasTotal = transacoes.filter(t => t.tipo === 'renda').reduce((a, b) => a + b.valor, 0);
-    const despesasTotal = transacoes.filter(t => t.tipo === 'despesa').reduce((a, b) => a + b.valor, 0);
-    
+    const rTotal = transacoes.filter(t => t.tipo === 'renda').reduce((a, b) => a + b.valor, 0);
+    const dTotal = transacoes.filter(t => t.tipo === 'despesa').reduce((a, b) => a + b.valor, 0);
+
     doc.setFontSize(11);
-    doc.text(`Renda Total: R$ ${rendasTotal.toFixed(2)}`, 20, 45);
-    doc.text(`Despesas Totais: R$ ${despesasTotal.toFixed(2)}`, 20, 52);
-    doc.text(`Saldo Final: R$ ${(rendasTotal - despesasTotal).toFixed(2)}`, 20, 59);
+    doc.text(`Renda Total: R$ ${rTotal.toFixed(2)}`, 20, 45);
+    doc.text(`Despesas Totais: R$ ${dTotal.toFixed(2)}`, 20, 52);
+    doc.text(`Saldo Final: R$ ${(rTotal - dTotal).toFixed(2)}`, 20, 59);
 
-    // Gráfico (Captura do Canvas)
     const canvas = document.getElementById('graficoFinanceiro');
-    if (rendasTotal > 0 || despesasTotal > 0) {
+    if (rTotal > 0 || dTotal > 0) {
         const imgData = canvas.toDataURL('image/png');
-        doc.addImage(imgData, 'PNG', 55, 65, 100, 100);
+        doc.addImage(imgData, 'PNG', 65, 65, 80, 80);
     }
 
-    // Históricos
-    let y = 175;
-    doc.setFont("helvetica", "bold");
-    doc.text("Histórico de Rendas", 20, y);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(9);
-    transacoes.filter(t => t.tipo === 'renda').forEach(t => {
-        y += 6;
-        doc.text(`${t.data} - ${t.nome}: R$ ${t.valor.toFixed(2)}`, 20, y);
-    });
-
-    y += 15;
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(11);
-    doc.text("Histórico de Despesas", 20, y);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(9);
-    transacoes.filter(t => t.tipo === 'despesa').forEach(t => {
+    let y = 160;
+    doc.setFont("helvetica", "bold").text("Histórico de Movimentações", 20, y);
+    doc.setFont("helvetica", "normal").setFontSize(9);
+    
+    transacoes.forEach(t => {
         y += 6;
         if (y > 275) { doc.addPage(); y = 20; }
-        doc.text(`${t.data} - ${t.nome}: R$ ${t.valor.toFixed(2)}`, 20, y);
+        doc.text(`${t.data} - [${t.tipo.toUpperCase()}] ${t.nome}: R$ ${t.valor.toFixed(2)}`, 20, y);
     });
 
-    // Rodapé e Assinatura
-    doc.setFontSize(8);
-    doc.setTextColor(150);
-    doc.text(`MoneyZen CS © C.Silva — Relatório gerado em ${dataAtual}`, 105, 285, { align: "center" });
-
-    doc.save(`Relatorio_MoneyZen.pdf`);
+    doc.setFontSize(8).setTextColor(150);
+    doc.text(`MoneyZen CS © C.Silva — Extraído em ${dataHora}`, 105, 285, { align: "center" });
+    doc.save(`Relatorio_MoneyZen_${agora.toLocaleDateString('pt-BR').replace(/\//g, '-')}.pdf`);
 }
