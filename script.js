@@ -1,11 +1,7 @@
-/**
- * MONEYZEN CS - SISTEMA BLINDADO
- * PROPRIEDADE EXCLUSIVA: C. SILVA (2026)
- */
 "use strict";
 
 (function() {
-    const _LICENSE_KEY = "MONEYZEN-CS-2026-PRO-SECURITY-BY-CSILVA";
+    const _LICENSE = "MONEYZEN-CS-2026-PRO-SECURITY-BY-CSILVA";
     let transacoes = JSON.parse(localStorage.getItem('moneyzen_data')) || [];
     let meuGrafico = null;
 
@@ -23,7 +19,7 @@
     window.adicionar = function(tipo) {
         const n = document.getElementById('nomeDesc'), v = document.getElementById('valorMontante');
         const nome = n.value.trim(), valor = parseFloat(v.value);
-        if (!nome || isNaN(valor) || valor <= 0) return alert("Insira dados válidos.");
+        if (!nome || isNaN(valor) || valor <= 0) return alert("Dados inválidos.");
         transacoes.push({ id: Date.now(), nome, valor, tipo, data: new Date().toLocaleDateString('pt-BR') });
         n.value = ''; v.value = '';
         salvarEAtualizar();
@@ -71,31 +67,28 @@
         
         doc.setFont("helvetica", "bold").setFontSize(22).setTextColor(11, 44, 61);
         doc.text("MoneyZen CS", 105, 25, { align: "center" });
-        doc.setFontSize(8).setTextColor(150).text(`ID AUTENTICIDADE: ${_LICENSE_KEY}`, 105, 32, { align: "center" });
+        doc.setFontSize(8).setTextColor(150).text(`ID AUTENTICIDADE: ${_LICENSE}`, 105, 32, { align: "center" });
 
         const rT = transacoes.filter(t => t.tipo === 'renda').reduce((a, b) => a + b.valor, 0);
         const dT = transacoes.filter(t => t.tipo === 'despesa').reduce((a, b) => a + b.valor, 0);
 
-        doc.setTextColor(0).setFontSize(11).text(`Gerado em: ${timestamp}`, 20, 50);
-        doc.text(`Renda Total: R$ ${rT.toFixed(2)}`, 20, 58);
-        doc.text(`Despesa Total: R$ ${dT.toFixed(2)}`, 20, 66);
-        doc.text(`Saldo Líquido: R$ ${(rT - dT).toFixed(2)}`, 20, 74);
+        doc.setTextColor(0).setFontSize(11).text(`Gerado em: ${timestamp}`, 20, 45);
+        doc.text(`Saldo Líquido: R$ ${(rT - dT).toFixed(2)}`, 20, 53);
 
         const canvas = document.getElementById('graficoFinanceiro');
-        if (rT > 0 || dT > 0) doc.addImage(canvas.toDataURL('image/png'), 'PNG', 65, 80, 80, 80);
+        if (rT > 0 || dT > 0) doc.addImage(canvas.toDataURL('image/png'), 'PNG', 65, 65, 80, 80);
 
-        // HISTÓRICO NO PDF
-        let y = 175;
+        let y = 160;
         doc.setFont("helvetica", "bold").setFontSize(12).text("Histórico de Lançamentos", 20, y);
         transacoes.forEach(t => {
             y += 8;
-            if (y > 275) { doc.addPage(); y = 20; }
+            if (y > 275) { doc.addPage(); y = 25; }
             doc.setFont("helvetica", "normal").setFontSize(9).setTextColor(50);
             doc.text(`${t.data} - ${t.nome}: R$ ${t.valor.toFixed(2)} (${t.tipo.toUpperCase()})`, 20, y);
         });
 
-        doc.setFontSize(8).setTextColor(150).text("© 2026 MoneyZen CS. Propriedade Intelectual de C. Silva.", 105, 290, { align: "center" });
-        doc.save(`MoneyZen_Relatorio.pdf`);
+        doc.setFontSize(8).setTextColor(150).text("© 2026 MoneyZen CS. Propriedade de C. Silva.", 105, 290, { align: "center" });
+        doc.save(`MoneyZen_Relatorio_Full.pdf`);
     };
 
     window.zerarDados = function() {
