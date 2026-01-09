@@ -5,8 +5,6 @@
   <title>MoneyZen CS</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" content="#0b2c3d">
-
-  <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="style.css">
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -15,9 +13,11 @@
 </head>
 <body>
 
-<header onclick="window.location.reload()" style="cursor: pointer;">
-  <h1>MoneyZen CS</h1>
-  <p style="font-size: 0.7em; margin: 0; opacity: 0.8;">Início / Atualizar</p>
+<header>
+  <div class="header-content">
+    <h1 onclick="window.location.reload()" style="cursor: pointer;">MoneyZen CS</h1>
+    <button id="theme-toggle" onclick="toggleTheme()" title="Alternar Modo Claro/Escuro">🌓</button>
+  </div>
 </header>
 
 <main>
