@@ -1,9 +1,9 @@
 :root {
   --bg-body: #f4f7f9;
   --bg-card: #ffffff;
-  --text-main: #333333;
+  --text-main: #333;
   --header-bg: #0b2c3d;
-  --border: #eeeeee;
+  --border: #eee;
   --azul-renda: #1b465a;
   --vermelho-despesa: #d14d4d;
 }
@@ -12,37 +12,26 @@
   --bg-body: #121212;
   --bg-card: #1e1e1e;
   --text-main: #e0e0e0;
-  --header-bg: #000000;
-  --border: #333333;
+  --header-bg: #000;
+  --border: #333;
 }
 
-body { font-family: sans-serif; background: var(--bg-body); margin: 0; color: var(--text-main); transition: 0.3s; }
-
-header { background: var(--header-bg); color: white; padding: 15px 20px; }
+body { font-family: sans-serif; background: var(--bg-body); color: var(--text-main); margin: 0; transition: 0.3s; }
+header { background: var(--header-bg); color: white; padding: 15px 20px; text-align: center; }
 .header-content { max-width: 500px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-
 #theme-toggle { background: rgba(255,255,255,0.2); border: none; padding: 8px 12px; border-radius: 20px; cursor: pointer; color: white; }
-
 main { max-width: 500px; margin: 0 auto; padding: 15px; }
-
 .card { background: var(--bg-card); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-
 input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; background: transparent; color: inherit; }
-
 .buttons-row { display: flex; gap: 10px; }
 .btn-renda, .btn-despesa, .btn-pdf, .btn-zerar { flex: 1; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-
 .btn-renda { background: var(--azul-renda); color: white; }
 .btn-despesa { background: var(--vermelho-despesa); color: white; }
 .btn-pdf { background: #333; color: white; width: 100%; margin-top: 15px; }
 .btn-zerar { background: transparent; color: var(--vermelho-despesa); border: 1px solid var(--vermelho-despesa); width: 100%; margin-top: 15px; }
-
 .renda { color: #4dabf7; font-weight: bold; }
 .despesa { color: #ff8787; font-weight: bold; }
-
 .hist-item { display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding: 8px 0; font-size: 0.9em; }
-
 .chart-box { max-width: 250px; margin: 20px auto 0; }
-
 footer { text-align: center; padding: 30px; font-size: 0.8em; opacity: 0.7; }
-footer a { color: inherit; text-decoration: none; }
+footer a { color: inherit; text-decoration: none; margin-left: 10px; }
