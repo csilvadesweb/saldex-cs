@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>MoneyZen CS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#0b2c3d">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<header>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <img src="icons/icon-192.png" alt="MoneyZen CS" style="width:40px;height:40px;">
+    <h1>MoneyZen CS</h1>
+  </div>
+  <button id="installApp" style="display:none;">📲 Instalar App</button>
+</header>
+
+<main>
+  <section class="resumo">
+    <h2>Resumo Financeiro</h2>
+    <p>Renda: R$ <span id="renda">0</span></p>
+    <p>Despesas: R$ <span id="despesas">0</span></p>
+    <p>Saldo: R$ <span id="saldo">0</span></p>
+  </section>
+
+  <section class="historico">
+    <h2>Histórico</h2>
+    <ul id="listaHistorico"></ul>
+  </section>
+
+  <section class="grafico">
+    <h2>Gráfico Financeiro</h2>
+    <canvas id="graficoFinanceiro"></canvas>
+  </section>
+
+  <section class="assinatura">
+    <button id="exportPDF">Exportar PDF</button>
+  </section>
+</main>
+
+<script src="script.js"></script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js");
+  });
+}
+</script>
+
+</body>
+</html>
