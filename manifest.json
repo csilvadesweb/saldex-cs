@@ -1,23 +1,23 @@
 {
-  "short_name": "MoneyZen CS",
-  "name": "MoneyZen CS - Gestão Financeira",
+  "name": "MoneyZen CS",
+  "short_name": "MoneyZen",
+  "description": "Controle financeiro simples, rápido e seguro",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b2c3d",
+  "theme_color": "#0b2c3d",
   "icons": [
     {
-      "src": "Icon-192.png",
-      "type": "image/png",
+      "src": "https://cdn-icons-png.flaticon.com/512/2331/2331941.png",
       "sizes": "192x192",
-      "purpose": "any maskable"
+      "type": "image/png"
     },
     {
-      "src": "Icon-192.png",
-      "type": "image/png",
+      "src": "https://cdn-icons-png.flaticon.com/512/2331/2331941.png",
       "sizes": "512x512",
-      "purpose": "any"
+      "type": "image/png"
     }
-  ],
-  "start_url": "index.html",
-  "background_color": "#0b2c3d",
-  "display": "standalone",
-  "scope": "/",
-  "theme_color": "#0b2c3d"
+  ]
 }
