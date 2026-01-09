@@ -5,8 +5,14 @@
   <title>MoneyZen CS</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" content="#0b2c3d">
+  
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="Icon-192.png">
+  <link rel="icon" href="Icon-192.png">
+
   <meta name="author" content="C. Silva">
   <meta name="copyright" content="MoneyZen CS 2026 - Todos os direitos reservados">
+
   <link rel="stylesheet" href="style.css">
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -17,7 +23,7 @@
 <header>
   <div class="header-content">
     <h1 onclick="window.location.reload()" style="cursor: pointer;">MoneyZen CS</h1>
-    <button id="theme-toggle" onclick="toggleTheme()">🌓</button>
+    <button id="theme-toggle" onclick="toggleTheme()" title="Alternar Modo">🌓</button>
   </div>
 </header>
 
@@ -57,8 +63,8 @@
 </main>
 
 <footer>
-  <p>© 2026 MoneyZen CS - Propriedade de C. Silva</p>
-  <a href="privacy.html">Privacidade</a>
+  <p>© 2026 MoneyZen CS - Todos os Direitos Reservados a C. Silva</p>
+  <a href="privacy.html">Política de Privacidade</a>
 </footer>
 
 <script src="script.js"></script>
