@@ -1,7 +1,3 @@
-/**
- * MONEYZEN CS - SISTEMA BLINDADO
- * PROPRIEDADE EXCLUSIVA: C. SILVA (2026)
- */
 "use strict";
 
 (function() {
@@ -76,7 +72,6 @@
         const agora = new Date();
         const timestamp = `${agora.toLocaleDateString('pt-BR')} ${agora.toLocaleTimeString('pt-BR')}`;
 
-        // Cabeçalho
         doc.setFont("helvetica", "bold").setFontSize(18);
         doc.text("MoneyZen CS - Relatório Oficial", 105, 20, { align: "center" });
         doc.setFontSize(7).setTextColor(150);
@@ -90,24 +85,24 @@
         doc.text(`Despesa Total: R$ ${dT.toFixed(2)}`, 20, 56);
         doc.text(`Saldo Líquido: R$ ${(rT - dT).toFixed(2)}`, 20, 64);
 
-        // Gráfico
         const canvas = document.getElementById('graficoFinanceiro');
-        if (rT > 0 || dT > 0) doc.addImage(canvas.toDataURL('image/png'), 'PNG', 65, 75, 80, 80);
+        if (rT > 0 || dT > 0) {
+            const chartImg = canvas.toDataURL('image/png');
+            doc.addImage(chartImg, 'PNG', 65, 75, 80, 80);
+        }
 
-        // CORREÇÃO: ADICIONANDO O HISTÓRICO NO PDF
         let y = 170;
         doc.setFont("helvetica", "bold").setFontSize(12).text("Histórico de Lançamentos:", 20, y);
         doc.setFont("helvetica", "normal").setFontSize(9);
 
         transacoes.forEach((t) => {
             y += 7;
-            if (y > 275) { doc.addPage(); y = 20; } // Nova página se necessário
-            const txt = `${t.data} - ${t.nome}: R$ ${t.valor.toFixed(2)} (${t.tipo.toUpperCase()})`;
-            doc.text(txt, 20, y);
+            if (y > 275) { doc.addPage(); y = 20; }
+            doc.text(`${t.data} - ${t.nome}: R$ ${t.valor.toFixed(2)} (${t.tipo.toUpperCase()})`, 20, y);
         });
 
         doc.setFontSize(8).setTextColor(150);
-        doc.text("© 2026 MoneyZen CS. Propriedade Intelectual de C. Silva. Proibida Cópia.", 105, 285, { align: "center" });
-        doc.save(`MoneyZen_Relatorio_Full.pdf`);
+        doc.text("© 2026 MoneyZen CS. Propriedade Intelectual de C. Silva.", 105, 285, { align: "center" });
+        doc.save(`MoneyZen_Relatorio.pdf`);
     };
 })();
