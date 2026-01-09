@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
+
   <title>SALDEX CS</title>
 
-  <!-- Viewport & PWA -->
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#0b2c3d">
+  <!-- Viewport seguro para PWA -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 
-  <!-- iOS PWA -->
+  <!-- PWA / Mobile -->
+  <meta name="theme-color" content="#0b2c3d">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="SALDEX CS">
@@ -17,103 +17,114 @@
   <!-- Manifest -->
   <link rel="manifest" href="manifest.json">
 
-  <!-- Icons (LOCAL - obrigatório para instalar como app) -->
+  <!-- Ícone iOS -->
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
 
-  <!-- Styles -->
+  <!-- CSS -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- Libs -->
+  <!-- Bibliotecas -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-  <!-- Service Worker -->
+  <!-- Registro do Service Worker (CORRETO) -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./service-worker.js')
-          .then(() => console.log('SALDEX CS Enterprise ativo'))
-          .catch(err => console.error('Service Worker erro:', err));
+          .then(() => console.log('SALDEX CS PWA ativo'))
+          .catch(err => console.error('Erro no Service Worker:', err));
       });
     }
   </script>
 </head>
 
 <body>
-  <header>
-    <div class="header-content">
-      <h1 onclick="window.location.reload()" style="cursor:pointer;">
-        SALDEX CS
-      </h1>
-      <button id="theme-toggle" onclick="toggleTheme()">🌓</button>
+
+<header>
+  <div class="header-content">
+    <h1 onclick="window.location.reload()" style="cursor:pointer;">
+      SALDEX CS
+    </h1>
+    <button id="theme-toggle" onclick="toggleTheme()">🌓</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- NOVA MOVIMENTAÇÃO -->
+  <section class="card">
+    <h2>Nova Movimentação</h2>
+
+    <input
+      type="text"
+      id="nomeDesc"
+      placeholder="Descrição (Ex: Salário, Aluguel)"
+      autocomplete="off"
+    >
+
+    <input
+      type="number"
+      id="valorMontante"
+      placeholder="Valor R$"
+      inputmode="decimal"
+    >
+
+    <div class="buttons-row">
+      <button class="btn-renda" onclick="adicionar('renda')">
+        ＋ Renda
+      </button>
+      <button class="btn-despesa" onclick="adicionar('despesa')">
+        － Despesa
+      </button>
     </div>
-  </header>
+  </section>
 
-  <main>
-    <!-- Nova movimentação -->
-    <section class="card">
-      <h2>Nova Movimentação</h2>
-      <div class="input-group">
-        <input
-          type="text"
-          id="nomeDesc"
-          placeholder="Descrição (Ex: Salário)"
-          autocomplete="off"
-        >
-        <input
-          type="number"
-          id="valorMontante"
-          placeholder="Valor R$"
-          inputmode="decimal"
-        >
-        <div class="buttons-row">
-          <button onclick="adicionar('renda')" class="btn-renda">＋ Renda</button>
-          <button onclick="adicionar('despesa')" class="btn-despesa">－ Despesa</button>
-        </div>
-      </div>
-    </section>
+  <!-- RESUMO -->
+  <section class="card">
+    <h2>Resumo Financeiro</h2>
 
-    <!-- Resumo -->
-    <section class="card">
-      <h2>Resumo Financeiro</h2>
-      <div id="resumoBox">
-        <p>Renda Total: <span id="resumoRenda">R$ 0,00</span></p>
-        <p>Despesas Totais: <span id="resumoDespesa">R$ 0,00</span></p>
-        <hr>
-        <p>
-          <strong>Saldo Final:
-            <span id="resumoSaldo">R$ 0,00</span>
-          </strong>
-        </p>
-      </div>
+    <p>Renda Total: <strong id="resumoRenda">R$ 0,00</strong></p>
+    <p>Despesas Totais: <strong id="resumoDespesa">R$ 0,00</strong></p>
+    <hr>
+    <p>
+      <strong>
+        Saldo Final:
+        <span id="resumoSaldo">R$ 0,00</span>
+      </strong>
+    </p>
 
-      <div class="chart-box">
-        <canvas id="graficoFinanceiro"></canvas>
-      </div>
-    </section>
+    <div class="chart-box">
+      <canvas id="graficoFinanceiro"></canvas>
+    </div>
+  </section>
 
-    <!-- Histórico -->
-    <section class="card">
-      <h2>Histórico Detalhado</h2>
-      <div id="listaHistorico"></div>
-      <hr>
-      <button onclick="exportarPDF()" class="btn-pdf">
-        📄 Exportar PDF Profissional
-      </button>
-      <button onclick="zerarDados()" class="btn-zerar">
-        ⚠️ Zerar todos os dados
-      </button>
-    </section>
-  </main>
+  <!-- HISTÓRICO -->
+  <section class="card">
+    <h2>Histórico Detalhado</h2>
 
-  <footer>
-    <p>© 2026 SALDEX CS — Propriedade Intelectual de C. Silva</p>
-    <a href="privacy.html">Privacidade</a>
-  </footer>
+    <div id="listaHistorico"></div>
 
-  <!-- App Script -->
-  <script src="script.js"></script>
+    <hr>
+
+    <button class="btn-pdf" onclick="exportarPDF()">
+      📄 Exportar PDF Profissional
+    </button>
+
+    <button class="btn-zerar" onclick="zerarDados()">
+      ⚠️ Zerar todos os dados
+    </button>
+  </section>
+
+</main>
+
+<footer>
+  <p>© 2026 SALDEX CS · Propriedade de C. Silva</p>
+  <a href="privacy.html">Privacidade</a>
+</footer>
+
+<!-- Script principal -->
+<script src="script.js"></script>
+
 </body>
 </html>
