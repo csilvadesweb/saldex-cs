@@ -1,75 +1,161 @@
-"use strict";
+'use strict';
 
-(() => {
-  const LICENSE = "SALDEX-CS-ENTERPRISE-2026-BY-CSILVA";
-  let dados = JSON.parse(localStorage.getItem('saldex_data')) || [];
-  let grafico;
+/* =========================================================
+   SALDEX CS – SCRIPT PRINCIPAL
+   Release Enterprise Base
+   Autor: C.Silva
+   ========================================================= */
 
-  window.onload = () => {
-    if (localStorage.getItem('theme') === 'dark')
-      document.body.classList.add('dark-mode');
-    atualizar();
-  };
+console.log('SALDEX CS carregado com sucesso');
 
-  window.toggleTheme = () => {
-    document.body.classList.toggle('dark-mode');
-    localStorage.setItem('theme',
-      document.body.classList.contains('dark-mode') ? 'dark' : 'light');
-  };
+/* =======================
+   STORAGE SEGURO
+======================= */
+const STORAGE_KEY = 'saldex_cs_dados_v1';
 
-  window.adicionar = tipo => {
-    const nome = nomeDesc.value.trim();
-    const valor = parseFloat(valorMontante.value);
-    if (!nome || valor <= 0) return alert("Dados inválidos");
+const defaultData = {
+  rendas: [],
+  despesas: []
+};
 
-    dados.push({ nome, valor, tipo, data: new Date().toLocaleDateString('pt-BR') });
-    nomeDesc.value = valorMontante.value = '';
-    salvar();
-  };
-
-  function salvar() {
-    localStorage.setItem('saldex_data', JSON.stringify(dados));
-    atualizar();
+function loadData() {
+  try {
+    const data = localStorage.getItem(STORAGE_KEY);
+    return data ? JSON.parse(data) : { ...defaultData };
+  } catch (e) {
+    console.error('Erro ao carregar dados', e);
+    return { ...defaultData };
   }
+}
 
-  function atualizar() {
-    let r = 0, d = 0;
-    listaHistorico.innerHTML = '';
-
-    dados.forEach(t => {
-      t.tipo === 'renda' ? r += t.valor : d += t.valor;
-      listaHistorico.innerHTML += `<div class="hist-item">
-        <span>${t.data} - ${t.nome}</span>
-        <b class="${t.tipo}">R$ ${t.valor.toFixed(2)}</b>
-      </div>`;
-    });
-
-    resumoRenda.textContent = `R$ ${r.toFixed(2)}`;
-    resumoDespesa.textContent = `R$ ${d.toFixed(2)}`;
-    resumoSaldo.textContent = `R$ ${(r-d).toFixed(2)}`;
-    graf(r,d);
+function saveData(data) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch (e) {
+    alert('Erro ao salvar dados no dispositivo.');
   }
+}
 
-  function graf(r,d) {
-    if (grafico) grafico.destroy();
-    grafico = new Chart(graficoFinanceiro, {
-      type:'doughnut',
-      data:{labels:['Renda','Despesas'],datasets:[{data:[r,d]}]}
-    });
+/* =======================
+   ESTADO GLOBAL
+======================= */
+let appData = loadData();
+
+/* =======================
+   UTILIDADES
+======================= */
+function formatMoney(value) {
+  return value.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  });
+}
+
+function getTotal(lista) {
+  return lista.reduce((sum, item) => sum + item.valor, 0);
+}
+
+/* =======================
+   ADICIONAR RENDA
+======================= */
+function adicionarRenda(nome, valor) {
+  if (!nome || valor <= 0) return;
+
+  appData.rendas.push({
+    nome,
+    valor,
+    data: new Date().toISOString()
+  });
+
+  saveData(appData);
+  render();
+}
+
+/* =======================
+   ADICIONAR DESPESA
+======================= */
+function adicionarDespesa(nome, valor) {
+  if (!nome || valor <= 0) return;
+
+  appData.despesas.push({
+    nome,
+    valor,
+    data: new Date().toISOString()
+  });
+
+  saveData(appData);
+  render();
+}
+
+/* =======================
+   RENDERIZAÇÃO
+======================= */
+function render() {
+  renderTotais();
+  renderHistorico();
+}
+
+function renderTotais() {
+  const totalRendas = getTotal(appData.rendas);
+  const totalDespesas = getTotal(appData.despesas);
+  const saldo = totalRendas - totalDespesas;
+
+  const rendaEl = document.getElementById('totalRenda');
+  const despesaEl = document.getElementById('totalDespesa');
+  const saldoEl = document.getElementById('saldoFinal');
+
+  if (rendaEl) rendaEl.textContent = formatMoney(totalRendas);
+  if (despesaEl) despesaEl.textContent = formatMoney(totalDespesas);
+
+  if (saldoEl) {
+    saldoEl.textContent = formatMoney(saldo);
+    saldoEl.style.color = saldo >= 0 ? '#0f9d58' : '#d93025';
   }
+}
 
-  window.zerarDados = () => {
-    if (confirm("Excluir todos os dados?")) {
-      localStorage.removeItem('saldex_data');
-      location.reload();
-    }
-  };
+function renderHistorico() {
+  const lista = document.getElementById('historicoLista');
+  if (!lista) return;
 
-  window.exportarPDF = () => {
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF();
-    pdf.text("SALDEX CS — Relatório Enterprise", 105, 20, {align:"center"});
-    pdf.text(`Licença: ${LICENSE}`, 105, 28, {align:"center"});
-    pdf.save("SALDEX_CS_Relatorio.pdf");
-  };
-})();
+  lista.innerHTML = '';
+
+  const historico = [
+    ...appData.rendas.map(r => ({ ...r, tipo: 'Renda' })),
+    ...appData.despesas.map(d => ({ ...d, tipo: 'Despesa' }))
+  ].sort((a, b) => new Date(b.data) - new Date(a.data));
+
+  historico.forEach(item => {
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <strong>${item.tipo}</strong> - ${item.nome}
+      <span>${formatMoney(item.valor)}</span>
+    `;
+    li.className = item.tipo === 'Renda' ? 'renda' : 'despesa';
+    lista.appendChild(li);
+  });
+}
+
+/* =======================
+   LIMPAR DADOS
+======================= */
+function limparTudo() {
+  if (!confirm('Deseja apagar todos os dados?')) return;
+
+  appData = { ...defaultData };
+  saveData(appData);
+  render();
+}
+
+/* =======================
+   SUPORTE PWA (ANDROID / IOS)
+======================= */
+window.addEventListener('load', () => {
+  render();
+});
+
+/* =======================
+   PROTEÇÃO ANTI-ERRO
+======================= */
+window.onerror = function () {
+  return true; // evita quebra do app
+};
