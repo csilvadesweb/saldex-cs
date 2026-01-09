@@ -3,14 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <title>MoneyZen CS</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#0b2c3d">
-  <meta name="author" content="C. Silva">
-  <meta name="copyright" content="MoneyZen CS 2026 - Todos os direitos reservados">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="MoneyZen CS">
+  
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2489/2489756.png">
   <link rel="stylesheet" href="style.css">
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js')
+          .then(reg => console.log('MoneyZen: Sistema Ativo'))
+          .catch(err => console.log('Erro PWA:', err));
+      });
+    }
+  </script>
 </head>
 <body>
 
@@ -58,7 +73,7 @@
 
 <footer>
   <p>© 2026 MoneyZen CS - Propriedade de C. Silva</p>
-  <a href="privacy.html">Privacidade</a>
+  <a href="#">Privacidade</a>
 </footer>
 
 <script src="script.js"></script>
