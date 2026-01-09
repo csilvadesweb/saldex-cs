@@ -3,7 +3,20 @@
 let transacoes = JSON.parse(localStorage.getItem('moneyzen_data')) || [];
 let meuGrafico = null;
 
-window.onload = () => atualizarInterface();
+window.onload = () => {
+    // Carregar tema salvo
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+    atualizarInterface();
+};
+
+function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    atualizarInterface(); // Redesenha o gráfico para ajustar as cores da legenda
+}
 
 function adicionar(tipo) {
     const nomeInput = document.getElementById('nomeDesc');
@@ -65,6 +78,8 @@ function renderGrafico(renda, despesa) {
     if (meuGrafico) meuGrafico.destroy();
     if (renda === 0 && despesa === 0) return;
 
+    const isDark = document.body.classList.contains('dark-mode');
+
     meuGrafico = new Chart(ctx, {
         type: 'doughnut',
         data: {
@@ -75,12 +90,19 @@ function renderGrafico(renda, despesa) {
                 borderWidth: 0
             }]
         },
-        options: { plugins: { legend: { position: 'bottom' } } }
+        options: { 
+            plugins: { 
+                legend: { 
+                    position: 'bottom',
+                    labels: { color: isDark ? '#ffffff' : '#333333' }
+                } 
+            } 
+        }
     });
 }
 
 function zerarDados() {
-    if (confirm("⚠️ ATENÇÃO: Deseja apagar TODO o seu histórico?")) {
+    if (confirm("⚠️ ATENÇÃO: Isso apagará TODO o seu histórico. Continuar?")) {
         localStorage.removeItem('moneyzen_data');
         window.location.reload();
     }
@@ -114,8 +136,7 @@ async function exportarPDF() {
     doc.setFont("helvetica", "bold").text("Histórico de Movimentações", 20, y);
     doc.setFont("helvetica", "normal").setFontSize(9);
     transacoes.forEach(t => {
-        y += 6;
-        if (y > 275) { doc.addPage(); y = 20; }
+        y += 6; if (y > 275) { doc.addPage(); y = 20; }
         doc.text(`${t.data} - ${t.nome}: R$ ${t.valor.toFixed(2)} (${t.tipo.toUpperCase()})`, 20, y);
     });
 
