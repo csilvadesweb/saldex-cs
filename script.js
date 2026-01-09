@@ -1,73 +1,111 @@
-async function exportarPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    const dataAtual = new Date().toLocaleDateString('pt-BR');
+"use strict";
 
-    // --- CONFIGURAÇÃO DE CORES ---
-    const azulEscuro = [11, 44, 61]; // #0b2c3d
-    const cinzaTexto = [80, 80, 80];
+// Inicialização de dados
+let transacoes = JSON.parse(localStorage.getItem('moneyzen_data')) || [];
+let meuGrafico = null;
 
-    // --- CABEÇALHO ---
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(18);
-    doc.text("MoneyZen CS", 105, 20, { align: "center" });
+// Função principal que roda quando a página carrega
+window.onload = function() {
+    atualizarInterface();
+};
+
+function adicionar(tipo) {
+    const nomeInput = document.getElementById('nomeDesc');
+    const valorInput = document.getElementById('valorMontante');
     
-    doc.setFontSize(10);
-    doc.setFont("helvetica", "normal");
-    doc.text("Relatório Financeiro Completo", 105, 27, { align: "center" });
+    const nome = nomeInput.value.trim();
+    const valor = parseFloat(valorInput.value);
 
-    // --- RESUMO FINANCEIRO ---
-    const rendas = transacoes.filter(t => t.tipo === 'renda').reduce((a, b) => a + b.valor, 0);
-    const despesas = transacoes.filter(t => t.tipo === 'despesa').reduce((a, b) => a + b.valor, 0);
-    const saldo = rendas - despesas;
+    if (nome === "" || isNaN(valor) || valor <= 0) {
+        alert("Por favor, insira um nome válido e um valor maior que zero.");
+        return;
+    }
 
-    doc.setFontSize(11);
-    doc.text(`Renda Total: R$ ${rendas.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 45);
-    doc.text(`Despesas Totais: R$ ${despesas.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 52);
-    doc.text(`Saldo Final: R$ ${saldo.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 20, 59);
+    const item = {
+        id: Date.now(),
+        nome: nome,
+        valor: valor,
+        tipo: tipo,
+        data: new Date().toLocaleDateString('pt-BR')
+    };
 
-    // --- GRÁFICO (Captura o elemento Canvas) ---
-    const canvas = document.getElementById('graficoFinanceiro');
-    const imgData = canvas.toDataURL('image/png');
-    // doc.addImage(imagem, tipo, x, y, largura, altura)
-    doc.addImage(imgData, 'PNG', 55, 65, 100, 100); 
-
-    // --- HISTÓRICO DE RENDAS ---
-    let currentY = 175;
-    doc.setFont("helvetica", "bold");
-    doc.text("Histórico de Rendas", 20, currentY);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(9);
+    transacoes.push(item);
     
-    transacoes.filter(t => t.tipo === 'renda').forEach(t => {
-        currentY += 6;
-        doc.text(`${t.data} - ${t.nome}: R$ ${t.valor.toFixed(2)}`, 20, currentY);
-    });
-
-    // --- HISTÓRICO DE DESPESAS ---
-    currentY += 15;
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(11);
-    doc.text("Histórico de Despesas", 20, currentY);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(9);
-
-    transacoes.filter(t => t.tipo === 'despesa').forEach(t => {
-        currentY += 6;
-        // Verifica se precisa de nova página se o histórico for muito longo
-        if (currentY > 270) { 
-            doc.addPage();
-            currentY = 20;
-        }
-        doc.text(`${t.data} - ${t.nome}: R$ ${t.valor.toFixed(2)}`, 20, currentY);
-    });
-
-    // --- RODAPÉ ---
-    doc.setFontSize(8);
-    doc.setTextColor(150);
-    const rodapeTexto = `MoneyZen CS © C.Silva — Relatório gerado automaticamente`;
-    doc.text(rodapeTexto, 105, 285, { align: "center" });
-
-    // --- DOWNLOAD ---
-    doc.save(`Relatorio_MoneyZen_${dataAtual}.pdf`);
+    // Limpar campos
+    nomeInput.value = '';
+    valorInput.value = '';
+    
+    salvarEAtualizar();
 }
+
+function salvarEAtualizar() {
+    localStorage.setItem('moneyzen_data', JSON.stringify(transacoes));
+    atualizarInterface();
+}
+
+function atualizarInterface() {
+    const lista = document.getElementById('listaHistorico');
+    if(!lista) return; // Proteção caso o HTML não tenha o ID
+
+    lista.innerHTML = '';
+    let totalRenda = 0;
+    let totalDespesa = 0;
+
+    // Criar listas separadas para o histórico (igual à sua imagem)
+    let htmlRendas = "<h3>Histórico de Rendas</h3>";
+    let htmlDespesas = "<h3>Histórico de Despesas</h3>";
+
+    transacoes.forEach(t => {
+        const itemHtml = `<div class="historico-item">
+            <span>${t.data} - ${t.nome}:</span> 
+            <b class="${t.tipo}">R$ ${t.valor.toFixed(2)}</b>
+        </div>`;
+
+        if (t.tipo === 'renda') {
+            totalRenda += t.valor;
+            htmlRendas += itemHtml;
+        } else {
+            totalDespesa += t.valor;
+            htmlDespesas += itemHtml;
+        }
+    });
+
+    lista.innerHTML = htmlRendas + "<br>" + htmlDespesas;
+
+    // Atualizar Resumo
+    document.getElementById('resumoRenda').innerText = `R$ ${totalRenda.toFixed(2)}`;
+    document.getElementById('resumoDespesa').innerText = `R$ ${totalDespesa.toFixed(2)}`;
+    document.getElementById('resumoSaldo').innerText = `R$ ${(totalRenda - totalDespesa).toFixed(2)}`;
+
+    atualizarGrafico(totalRenda, totalDespesa);
+}
+
+function atualizarGrafico(renda, despesa) {
+    const canvas = document.getElementById('graficoFinanceiro');
+    if(!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (meuGrafico) meuGrafico.destroy();
+
+    // Se não houver dados, o gráfico não aparece
+    if (renda === 0 && despesa === 0) return;
+
+    meuGrafico = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Renda', 'Despesas'],
+            datasets: [{
+                data: [renda, despesa],
+                backgroundColor: ['#1b465a', '#d14d4d'], // Cores da sua imagem
+                borderWidth: 0
+            }]
+        },
+        options: {
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+}
+
+// A função exportarPDF (aquela que te mandei antes) deve vir aqui embaixo...
