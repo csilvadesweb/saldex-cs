@@ -59,7 +59,9 @@ function atualizarInterface() {
 }
 
 function renderGrafico(renda, despesa) {
-    const ctx = document.getElementById('graficoFinanceiro').getContext('2d');
+    const canvas = document.getElementById('graficoFinanceiro');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
     if (meuGrafico) meuGrafico.destroy();
     if (renda === 0 && despesa === 0) return;
 
@@ -78,7 +80,7 @@ function renderGrafico(renda, despesa) {
 }
 
 function zerarDados() {
-    if (confirm("Deseja apagar TODO o histórico?")) {
+    if (confirm("⚠️ ATENÇÃO: Deseja apagar TODO o seu histórico?")) {
         localStorage.removeItem('moneyzen_data');
         window.location.reload();
     }
@@ -109,7 +111,7 @@ async function exportarPDF() {
     if (rT > 0 || dT > 0) doc.addImage(canvas.toDataURL('image/png'), 'PNG', 65, 75, 80, 80);
 
     let y = 175;
-    doc.setFont("helvetica", "bold").text("Histórico", 20, y);
+    doc.setFont("helvetica", "bold").text("Histórico de Movimentações", 20, y);
     doc.setFont("helvetica", "normal").setFontSize(9);
     transacoes.forEach(t => {
         y += 6;
@@ -118,6 +120,6 @@ async function exportarPDF() {
     });
 
     doc.setFontSize(8).setTextColor(150);
-    doc.text(`MoneyZen CS © C.Silva — ${dataHora}`, 105, 285, { align: "center" });
+    doc.text(`MoneyZen CS © C.Silva — Extraído em ${dataHora}`, 105, 285, { align: "center" });
     doc.save(`Relatorio_MoneyZen.pdf`);
 }
