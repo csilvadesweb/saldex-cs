@@ -2,36 +2,26 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-
   <title>SALDEX CS</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#0b2c3d">
-
-  <!-- iOS PWA -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="SALDEX CS">
 
-  <!-- Manifest -->
   <link rel="manifest" href="manifest.json">
-
-  <!-- Ícone (temporário — depois trocamos para local) -->
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-
-  <!-- Estilo -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- Bibliotecas -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-  <!-- Service Worker -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./service-worker.js')
-          .then(() => console.log('SALDEX CS: Sistema Ativo'))
+          .then(() => console.log('SALDEX CS Enterprise ativo'))
           .catch(err => console.log('Erro PWA:', err));
       });
     }
@@ -39,63 +29,42 @@
 </head>
 
 <body>
-
 <header>
   <div class="header-content">
-    <h1 onclick="window.location.reload()" style="cursor: pointer;">
-      SALDEX CS
-    </h1>
+    <h1 onclick="window.location.reload()" style="cursor:pointer;">SALDEX CS</h1>
     <button id="theme-toggle" onclick="toggleTheme()">🌓</button>
   </div>
 </header>
 
 <main>
-
   <section class="card">
     <h2>Nova Movimentação</h2>
-
-    <div class="input-group">
-      <input type="text" id="nomeDesc" placeholder="Descrição (Ex: Salário)">
-      <input type="number" id="valorMontante" placeholder="Valor R$">
-
-      <div class="buttons-row">
-        <button onclick="adicionar('renda')" class="btn-renda">＋ Renda</button>
-        <button onclick="adicionar('despesa')" class="btn-despesa">－ Despesa</button>
-      </div>
+    <input id="nomeDesc" placeholder="Descrição">
+    <input id="valorMontante" type="number" placeholder="Valor R$">
+    <div class="buttons-row">
+      <button onclick="adicionar('renda')" class="btn-renda">＋ Renda</button>
+      <button onclick="adicionar('despesa')" class="btn-despesa">－ Despesa</button>
     </div>
   </section>
 
   <section class="card">
     <h2>Resumo Financeiro</h2>
-
-    <div id="resumoBox">
-      <p>Renda Total: <span id="resumoRenda">R$ 0,00</span></p>
-      <p>Despesas Totais: <span id="resumoDespesa">R$ 0,00</span></p>
-      <hr>
-      <p><strong>Saldo Final: <span id="resumoSaldo">R$ 0,00</span></strong></p>
-    </div>
-
+    <p>Renda: <span id="resumoRenda">R$ 0,00</span></p>
+    <p>Despesas: <span id="resumoDespesa">R$ 0,00</span></p>
+    <hr>
+    <strong>Saldo: <span id="resumoSaldo">R$ 0,00</span></strong>
     <div class="chart-box">
       <canvas id="graficoFinanceiro"></canvas>
     </div>
   </section>
 
   <section class="card">
-    <h2>Histórico Detalhado</h2>
-
+    <h2>Histórico</h2>
     <div id="listaHistorico"></div>
-
     <hr>
-
-    <button onclick="exportarPDF()" class="btn-pdf">
-      📄 Exportar PDF Profissional
-    </button>
-
-    <button onclick="zerarDados()" class="btn-zerar">
-      ⚠️ Zerar todos os dados
-    </button>
+    <button onclick="exportarPDF()" class="btn-pdf">📄 Exportar PDF</button>
+    <button onclick="zerarDados()" class="btn-zerar">⚠️ Zerar Dados</button>
   </section>
-
 </main>
 
 <footer>
