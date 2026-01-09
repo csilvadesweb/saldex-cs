@@ -24,38 +24,49 @@
   <section class="card">
     <h2>Nova Movimentação</h2>
     <div class="input-group">
-      <input type="text" id="nomeDesc" placeholder="Nome (Ex: Salário, Aluguel)">
+      <input type="text" id="nomeDesc" placeholder="Descrição (Ex: Salário, Aluguel)">
       <input type="number" id="valorMontante" placeholder="Valor R$">
-      <div class="buttons">
-        <button onclick="adicionar('renda')" class="btn-renda">+ Renda</button>
-        <button onclick="adicionar('despesa')" class="btn-despesa">- Despesa</button>
+      <div class="buttons-row">
+        <button onclick="adicionar('renda')" class="btn-renda">＋ Renda</button>
+        <button onclick="adicionar('despesa')" class="btn-despesa">－ Despesa</button>
       </div>
     </div>
   </section>
 
   <section class="card">
-    <h2>Resumo</h2>
-    <div class="resumo-grid">
-      <div class="resumo-item">Rendas: <span id="resumoRenda">R$ 0,00</span></div>
-      <div class="resumo-item">Despesas: <span id="resumoDespesa">R$ 0,00</span></div>
-      <div class="resumo-item"><strong>Saldo: <span id="resumoSaldo">R$ 0,00</span></strong></div>
+    <h2>Resumo Financeiro</h2>
+    <div class="resumo-container">
+      <p>Renda Total: <span id="resumoRenda" class="renda">R$ 0,00</span></p>
+      <p>Despesas Totais: <span id="resumoDespesa" class="despesa">R$ 0,00</span></p>
+      <p><strong>Saldo Final: <span id="resumoSaldo">R$ 0,00</span></strong></p>
     </div>
-    <div class="chart-container">
+    
+    <div class="chart-box">
       <canvas id="graficoFinanceiro"></canvas>
     </div>
   </section>
 
   <section class="card">
-    <h2>Histórico</h2>
-    <div id="listaHistorico" class="historico">
+    <h2>Histórico Detalhado</h2>
+    <div id="listaHistorico">
       </div>
-    <button onclick="exportarPDF()" class="btn-pdf">📄 Exportar PDF Profissional</button>
+    
+    <hr>
+    
+    <button onclick="exportarPDF()" class="btn-pdf">
+      📄 Exportar PDF Profissional
+    </button>
+    
+    <div style="margin-top: 20px; text-align: center;">
+        <a href="privacy.html" style="color: #666; font-size: 0.8em;">Política de Privacidade</a>
+    </div>
   </section>
 </main>
 
 <script src="script.js"></script>
 
 <script>
+  // Registro do Service Worker para PWA
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
       navigator.serviceWorker.register("./service-worker.js")
