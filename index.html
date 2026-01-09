@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>MoneyZen CS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="#0b2c3d">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+
+<header>
+  <h1>MoneyZen CS</h1>
+  <button id="installApp" style="display:none;">📲 Instalar App</button>
+</header>
+
+<main>
+  <section class="card">
+    <h2>Nova Movimentação</h2>
+    <div class="input-group">
+      <input type="text" id="nomeDesc" placeholder="Descrição (Ex: Salário)">
+      <input type="number" id="valorMontante" placeholder="Valor R$">
+      <div class="buttons-row" style="display: flex; gap: 10px; margin-top: 10px;">
+        <button onclick="adicionar('renda')" style="flex: 1; background-color: #1b465a; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">＋ Renda</button>
+        <button onclick="adicionar('despesa')" style="flex: 1; background-color: #d14d4d; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">－ Despesa</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Resumo Financeiro</h2>
+    <div id="resumoBox" style="background: #f4f7f9; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+      <p>Renda Total: <span id="resumoRenda" style="color: #1b465a; font-weight: bold;">R$ 0,00</span></p>
+      <p>Despesas Totais: <span id="resumoDespesa" style="color: #d14d4d; font-weight: bold;">R$ 0,00</span></p>
+      <hr>
+      <p><strong>Saldo Final: <span id="resumoSaldo">R$ 0,00</span></strong></p>
+    </div>
+    <div style="max-width: 250px; margin: 0 auto;">
+      <canvas id="graficoFinanceiro"></canvas>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Histórico Detalhado</h2>
+    <div id="listaHistorico"></div>
+    <hr style="margin: 20px 0;">
+    <button onclick="exportarPDF()" style="width: 100%; background-color: #333; color: white; padding: 15px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">📄 Exportar PDF Profissional</button>
+  </section>
+</main>
+
+<footer style="text-align: center; padding: 20px;">
+  <a href="privacy.html" style="color: #888; text-decoration: none; font-size: 0.8em;">Política de Privacidade</a>
+</footer>
+
+<script src="script.js"></script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./service-worker.js")
+        .then(() => console.log("SW Ativo"))
+        .catch(err => console.error("Erro SW", err));
+    });
+  }
+</script>
+
+</body>
+</html>
