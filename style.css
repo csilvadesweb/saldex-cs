@@ -12,24 +12,30 @@ main { max-width: 500px; margin: 0 auto; padding: 15px; }
 
 .card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
 
-input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
 
 .buttons-row { display: flex; gap: 10px; }
 
-.btn-renda { flex: 1; background: var(--azul-renda); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+.btn-renda, .btn-despesa, .btn-pdf, .btn-zerar { 
+    flex: 1; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 14px; 
+}
 
-.btn-despesa { flex: 1; background: var(--vermelho-despesa); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+.btn-renda { background: var(--azul-renda); color: white; }
+.btn-despesa { background: var(--vermelho-despesa); color: white; }
+.btn-pdf { background: #333; color: white; width: 100%; margin-top: 10px; }
+
+.btn-zerar { 
+    background: white; color: var(--vermelho-despesa); border: 1px solid var(--vermelho-despesa); width: 100%; margin-top: 15px; 
+}
+
+.btn-zerar:hover { background: var(--vermelho-despesa); color: white; }
 
 #resumoRenda, .renda { color: var(--azul-renda); font-weight: bold; }
-
 #resumoDespesa, .despesa { color: var(--vermelho-despesa); font-weight: bold; }
 
-.hist-item { display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 5px 0; font-size: 0.9em; }
+.hist-item { display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding: 8px 0; font-size: 0.9em; }
 
-.btn-pdf { width: 100%; background: #333; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-
-.btn-limpar { background: none; border: none; color: #999; cursor: pointer; text-decoration: underline; font-size: 0.8em; }
+.chart-box { max-width: 250px; margin: 20px auto 0; }
 
 footer { text-align: center; padding: 20px; font-size: 0.8em; }
-
 footer a { color: #888; text-decoration: none; }
