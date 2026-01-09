@@ -9,6 +9,9 @@
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="style.css">
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
 
@@ -19,8 +22,34 @@
 
 <main>
   <section class="card">
-    <h2>Controle Financeiro</h2>
-    <p>Gerencie suas rendas e despesas com simplicidade.</p>
+    <h2>Nova Movimentação</h2>
+    <div class="input-group">
+      <input type="text" id="nomeDesc" placeholder="Nome (Ex: Salário, Aluguel)">
+      <input type="number" id="valorMontante" placeholder="Valor R$">
+      <div class="buttons">
+        <button onclick="adicionar('renda')" class="btn-renda">+ Renda</button>
+        <button onclick="adicionar('despesa')" class="btn-despesa">- Despesa</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Resumo</h2>
+    <div class="resumo-grid">
+      <div class="resumo-item">Rendas: <span id="resumoRenda">R$ 0,00</span></div>
+      <div class="resumo-item">Despesas: <span id="resumoDespesa">R$ 0,00</span></div>
+      <div class="resumo-item"><strong>Saldo: <span id="resumoSaldo">R$ 0,00</span></strong></div>
+    </div>
+    <div class="chart-container">
+      <canvas id="graficoFinanceiro"></canvas>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Histórico</h2>
+    <div id="listaHistorico" class="historico">
+      </div>
+    <button onclick="exportarPDF()" class="btn-pdf">📄 Exportar PDF Profissional</button>
   </section>
 </main>
 
